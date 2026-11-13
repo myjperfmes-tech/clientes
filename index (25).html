@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#120e0f">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Maison Noir">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="manifest" href="manifest.webmanifest">
+<title>Maison Noir</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Jost:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* Concepto: tienda oscura de carácter editorial. Hero tipográfico, carruseles por categoría con tarjetas de color, secciones crema para respirar. */
+:root{
+  --ink:#120e0f; --ink2:#1c1618; --cream:#f5ede3; --cream2:#e9dccb;
+  --gold:#c9a35b; --gold-d:#7a5f23; --rose:#b76e79;
+  --muted:#b3a79f; --muted-dk:#6d605a; --line:rgba(246,239,226,.18);
+  --ease:cubic-bezier(.22,.8,.24,1);
+  --f-disp:"Cormorant Garamond",Georgia,"Times New Roman",serif;
+  --f-body:"Jost",system-ui,-apple-system,"Segoe UI",sans-serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:var(--f-body);font-size:16px;background:var(--ink);color:var(--cream);line-height:1.5;overflow-x:hidden;overflow-x:clip;-webkit-tap-highlight-color:transparent}
+img,svg{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit;-webkit-appearance:none;appearance:none}
+html{-webkit-text-size-adjust:100%}
+:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+.wrap{width:min(1240px,100% - 32px - env(safe-area-inset-left,0px) - env(safe-area-inset-right,0px));margin-inline:auto}
+.disp{font-family:var(--f-disp);font-weight:600;letter-spacing:-.01em;line-height:1;text-wrap:balance;margin:0}
+
+/* Header */
+header.top{position:fixed;top:0;left:0;right:0;z-index:100;padding-top:env(safe-area-inset-top,0px);transition:background .3s}
+header.top.solid{background:rgba(18,14,15,.9);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+.bar{display:flex;align-items:center;justify-content:space-between;height:74px;padding-inline:max(16px,env(safe-area-inset-left)) max(16px,env(safe-area-inset-right))}
+.left{display:flex;align-items:center;gap:18px;min-width:0}
+.burger{flex:none;width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:transparent;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;transition:.3s}
+.burger:hover{background:var(--cream)}
+.burger span{width:18px;height:2px;background:var(--cream);transition:.3s}
+.burger:hover span{background:var(--ink)}
+.burger.x span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.burger.x span:nth-child(2){opacity:0}
+.burger.x span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+.logo{font-family:var(--f-disp);font-weight:600;font-size:1.5rem;letter-spacing:-.01em}
+.logo span{color:var(--gold)}
+.tagline{font-size:.72rem;letter-spacing:.3em;color:var(--muted);font-weight:600}
+.cartbtn{border:1px solid var(--cream);background:transparent;color:var(--cream);border-radius:999px;height:44px;padding:0 20px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:10px;transition:.3s;flex:none}
+.cartbtn:hover{background:var(--cream);color:var(--ink)}
+.cartbtn b{background:var(--gold);color:var(--ink);min-width:22px;height:22px;border-radius:99px;display:grid;place-items:center;font-size:.78rem}
+
+/* Menú */
+#menu{position:fixed;inset:0;background:var(--ink2);z-index:90;display:flex;flex-direction:column;justify-content:center;padding:100px 16px 40px;clip-path:circle(0 at 40px 40px);transition:clip-path .8s var(--ease);visibility:hidden}
+#menu.on{clip-path:circle(160% at 40px 40px);visibility:visible}
+#menu nav{display:flex;flex-direction:column}
+#menu nav a{font-family:var(--f-disp);font-weight:600;font-size:clamp(2.2rem,8vw,5.5rem);line-height:1.1;opacity:0;transform:translateX(-40px);transition:.6s var(--ease),color .2s;width:fit-content}
+#menu.on nav a{opacity:1;transform:none}
+#menu nav a:nth-child(2){transition-delay:.08s}#menu nav a:nth-child(3){transition-delay:.16s}#menu nav a:nth-child(4){transition-delay:.24s}
+#menu nav a:hover{color:var(--gold)}
+#menu .soc{margin-top:40px;display:flex;gap:26px;flex-wrap:wrap;color:var(--muted);font-size:.95rem}
+
+/* Hero */
+.hero{position:relative;min-height:640px;min-height:min(100svh,780px);display:flex;align-items:center;overflow:hidden;padding-block:130px 90px;
+  background:radial-gradient(900px 600px at 80% 30%,rgba(201,163,91,.26),transparent 60%),radial-gradient(700px 500px at 5% 95%,rgba(183,110,121,.26),transparent 60%),var(--ink)}
+.hero h1{font-size:clamp(3.2rem,11vw,9.5rem);position:relative;z-index:2}
+.hero h1 .o{font-style:italic;color:var(--cream)}
+.hero h1 .g{color:var(--gold)}
+.hero p{margin:26px 0 0;max-width:30em;color:var(--muted);font-size:1.1rem;position:relative;z-index:2}
+.hero .cta{margin-top:34px;position:relative;z-index:2}
+.floaty{position:absolute;right:-2%;top:50%;width:min(50vw,620px);transform:translateY(-50%);z-index:1;filter:drop-shadow(0 40px 60px rgba(0,0,0,.45));will-change:transform}
+.floaty svg{width:100%;height:auto;animation:bob 6s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(-14px) rotate(1.5deg)}}
+.mouse{position:absolute;left:50%;bottom:26px;width:26px;height:42px;border:2px solid var(--cream);border-radius:20px;transform:translateX(-50%);z-index:2}
+.mouse i{position:absolute;left:50%;top:8px;width:3px;height:8px;background:var(--cream);border-radius:3px;transform:translateX(-50%);animation:wheel 1.6s infinite}
+@keyframes wheel{0%{opacity:1;transform:translate(-50%,0)}100%{opacity:0;transform:translate(-50%,14px)}}
+
+/* Botón swap */
+.btn{position:relative;overflow:hidden;display:inline-block;height:54px;border-radius:999px;border:0;cursor:pointer;background:var(--cream);color:var(--ink);font-weight:700;font-size:.95rem;vertical-align:middle}
+.btn span{display:flex;align-items:center;justify-content:center;height:54px;padding:0 32px;transition:transform .4s var(--ease);white-space:nowrap}
+.btn span+span{position:absolute;inset:0;transform:translateY(100%);background:var(--gold)}
+.btn:hover span:first-child{transform:translateY(-100%)}
+.btn:hover span+span{transform:none}
+.btn.dark{background:var(--ink);color:var(--cream)}
+.btn.dark span+span{background:var(--rose);color:var(--ink)}
+
+/* Marquee */
+.marqwrap{overflow:hidden;position:relative;z-index:5;padding-block:18px;margin-top:-18px}
+.marq{background:var(--gold);color:var(--ink);padding-block:16px;white-space:nowrap;transform:rotate(-1.2deg);width:104%;margin-left:-2%}
+.marq .tr{display:inline-flex;gap:40px;padding-right:40px;animation:mq 30s linear infinite;font-family:var(--f-disp);font-weight:600;font-size:clamp(1.3rem,3vw,2.1rem)}
+@keyframes mq{to{transform:translateX(-50%)}}
+
+/* Productos */
+.prods{background:var(--cream);color:var(--ink);padding-block:110px 80px}
+.prods h2{font-size:clamp(2.6rem,8vw,6.4rem)}
+.prods h2 small{display:block;font-family:var(--f-body);font-weight:600;font-size:clamp(1rem,2vw,1.35rem);text-transform:none;letter-spacing:0;color:var(--muted-dk);margin-bottom:12px}
+.prods h2 .o{font-style:italic;color:var(--ink)}
+.demo-note{margin:18px 0 0;font-size:.9rem;color:var(--muted-dk);max-width:40em}
+.cat{margin-top:64px}
+.cat-h{display:flex;align-items:center;gap:16px;margin-bottom:22px}
+.cat-h i{flex:none;display:block;width:60px;height:2px;background:var(--ink)}
+.cat-h h3{margin:0;font-family:var(--f-disp);font-weight:600;font-size:clamp(1.3rem,2.4vw,1.9rem)}
+.cat-h .arrows{margin-left:auto;display:flex;gap:10px}
+.arr{width:46px;height:46px;border-radius:50%;border:1.5px solid var(--ink);background:transparent;color:var(--ink);font-size:1.1rem;cursor:pointer;display:grid;place-items:center;transition:.25s}
+.arr:hover{background:var(--ink);color:var(--cream)}
+.slider{display:flex;gap:20px;overflow-x:auto;scroll-snap-type:x mandatory;padding:8px 16px 28px;margin-inline:-16px;scrollbar-width:none;cursor:grab;-webkit-overflow-scrolling:touch}
+.slider::-webkit-scrollbar{display:none}
+.slider.drag{cursor:grabbing;scroll-snap-type:none}
+.pcard{flex:0 0 min(290px,78vw);scroll-snap-align:start;display:flex;flex-direction:column;user-select:none}
+.pimg{position:relative;height:270px;display:flex;align-items:flex-end;justify-content:center}
+.pimg>svg,.pimg>img{height:96%;width:auto;max-width:92%;object-fit:contain;transition:transform .5s var(--ease);filter:drop-shadow(0 16px 20px rgba(0,0,0,.25));pointer-events:none}
+.pcard:hover .pimg>svg,.pcard:hover .pimg>img{transform:translateY(-10px) rotate(-3deg) scale(1.04)}
+.stag{position:absolute;top:6px;left:6px;background:var(--ink);color:var(--cream);font-size:.7rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;padding:5px 11px;border-radius:99px}
+.stag.out{background:#9b2c2c}.stag.low{background:var(--rose)}
+.pdesc{background:var(--c);color:var(--t);border-radius:22px;padding:22px 22px 20px;margin-top:-14px;position:relative;z-index:2;display:flex;flex-direction:column;gap:8px;min-height:205px;transition:transform .4s var(--ease)}
+.pcard:hover .pdesc{transform:translateY(-6px)}
+.pdesc strong{font-family:var(--f-disp);font-weight:600;font-size:1.06rem;line-height:1.1}
+.pdesc p{margin:0;font-size:.88rem;opacity:.85;flex:1}
+.pfoot{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:6px}
+.price{font-family:var(--f-disp);font-weight:600;font-size:1.4rem;font-variant-numeric:tabular-nums}
+.add{flex:none;width:46px;height:46px;border-radius:50%;border:0;background:var(--t);color:var(--c);font-size:1.6rem;line-height:1;cursor:pointer;display:grid;place-items:center;transition:transform .3s var(--ease)}
+.add:hover{transform:rotate(90deg) scale(1.1)}
+.add:disabled{opacity:.35;cursor:not-allowed;transform:none}
+.state{padding:40px 0;color:var(--muted-dk)}
+
+/* Cómo comprar */
+.how{position:relative;padding-block:110px;background:var(--ink2);overflow:hidden}
+.how::before{content:"";position:absolute;inset:0;background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:80px 80px;opacity:.35;-webkit-mask-image:radial-gradient(circle at 70% 40%,#000,transparent 70%);mask-image:radial-gradient(circle at 70% 40%,#000,transparent 70%)}
+.how h2{font-size:clamp(2.6rem,8vw,6.4rem);position:relative}
+.how h2 .g{color:var(--gold)}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(250px,100%),1fr));gap:28px;margin-top:56px;position:relative}
+.step{border-top:2px solid var(--cream);padding-top:22px;min-width:0}
+.step b{font-family:var(--f-disp);font-weight:600;font-size:4rem;font-style:italic;color:var(--gold);display:block;line-height:1}
+.step h4{font-family:var(--f-disp);font-weight:600;font-size:1.3rem;margin:14px 0 8px}
+.step p{margin:0;color:var(--muted)}
+
+/* Novedades */
+.news{background:var(--cream);color:var(--ink);padding-block:84px 100px;overflow:hidden}
+.mosaic{display:flex;white-space:nowrap;animation:mq 45s linear infinite;width:max-content;margin-bottom:48px}
+.mosaic span{font-family:var(--f-disp);font-weight:600;font-size:clamp(3.5rem,11vw,9rem);padding-right:.35em;line-height:1}
+.mosaic span:nth-child(odd){font-style:italic;color:var(--ink)}
+.ncols{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(280px,100%),1fr));gap:30px}
+.ncard{min-width:0}
+.ncard .tg{display:flex;align-items:center;gap:12px;font-weight:700;font-size:.78rem;letter-spacing:.14em;text-transform:uppercase}
+.ncard .tg i{width:46px;height:2px;background:var(--ink)}
+.ncard h4{font-family:var(--f-disp);font-weight:600;font-size:1.7rem;line-height:1.02;margin:14px 0 10px}
+.ncard p{margin:0 0 18px;color:#4a3f3a}
+.nimg{aspect-ratio:4/3;border-radius:20px;overflow:hidden;background:var(--cream2);display:grid;place-items:center}
+.nimg>img{width:100%;height:100%;object-fit:cover}
+.nimg>div{width:48%;max-width:220px;transition:transform .6s var(--ease)}
+.ncard:hover .nimg>div{transform:scale(1.08) rotate(-3deg)}
+
+/* Footer */
+footer{background:var(--ink);padding-block:90px 36px}
+.ftop{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:end}
+.ftop .big{font-size:clamp(2.4rem,7vw,5.6rem)}
+.ftop .big .g{color:var(--gold)}
+.fnav{display:flex;gap:56px;flex-wrap:wrap}
+.fnav div{display:flex;flex-direction:column;gap:10px}
+.fnav a{color:var(--muted);transition:.2s}
+.fnav a:hover{color:var(--gold);padding-left:6px}
+.fbot{margin-top:64px;padding-top:24px;border-top:1px solid var(--line);display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;color:var(--muted);font-size:.88rem}
+@media(max-width:820px){.ftop{grid-template-columns:1fr}.tagline{display:none}.floaty{opacity:.3;width:92vw}}
+
+/* Carrito */
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.55);opacity:0;pointer-events:none;transition:.3s;z-index:150}
+.ov.on{opacity:1;pointer-events:all}
+#cart{position:fixed;top:0;right:0;height:100%;width:min(440px,100%);background:var(--cream);color:var(--ink);transform:translateX(100%);transition:transform .5s var(--ease);z-index:160;display:flex;flex-direction:column;padding-top:env(safe-area-inset-top,0px);visibility:hidden}
+#cart.on{transform:none;visibility:visible}
+#cart .ch{display:flex;justify-content:space-between;align-items:center;padding:20px 24px;border-bottom:1.5px solid var(--ink)}
+#cart .ch h3{margin:0;font-family:var(--f-disp);font-weight:600;font-size:1.5rem}
+#cart .ch button{background:none;border:0;color:var(--ink);font-size:2rem;line-height:1;cursor:pointer}
+#items{flex:1;overflow:auto;padding:6px 24px}
+.it{display:flex;gap:14px;align-items:center;padding:14px 0;border-bottom:1px solid var(--cream2)}
+.it .th{width:58px;height:58px;border-radius:14px;background:var(--c);flex:none;display:grid;place-items:center;padding:6px}
+.it .th svg,.it .th img{width:100%;height:100%;object-fit:contain}
+.it .n{flex:1;min-width:0;font-weight:600;font-size:.95rem;line-height:1.25}
+.it .n small{display:block;color:var(--muted-dk);font-weight:500;margin-top:2px}
+.qty{display:flex;align-items:center;gap:10px;font-weight:700}
+.qty button{width:30px;height:30px;border-radius:50%;border:1.5px solid var(--ink);background:transparent;color:var(--ink);cursor:pointer;font-size:1rem}
+.qty button:hover{background:var(--ink);color:var(--cream)}
+.cf{padding:18px 24px calc(24px + env(safe-area-inset-bottom,0px));border-top:1.5px solid var(--ink)}
+.tot{display:flex;justify-content:space-between;font-family:var(--f-disp);font-weight:600;font-size:1.5rem;margin-bottom:14px;font-variant-numeric:tabular-nums}
+.cf input{width:100%;padding:13px 16px;border:1.5px solid var(--ink);border-radius:12px;background:transparent;color:var(--ink);margin-bottom:10px;font-family:inherit;font-size:16px;-webkit-appearance:none;appearance:none}
+.cf input::placeholder{color:var(--muted-dk)}
+.cf .btn{display:block;width:100%}
+.empty{padding:50px 0;text-align:center;color:var(--muted-dk)}
+.toast{position:fixed;left:50%;bottom:calc(28px + env(safe-area-inset-bottom,0px));transform:translate(-50%,140px);background:var(--ink);color:var(--cream);padding:14px 24px;border-radius:99px;font-weight:600;z-index:200;transition:transform .5s var(--ease);border:1px solid var(--gold);max-width:calc(100% - 32px);text-align:center}
+.toast.on{transform:translate(-50%,0)}
+
+.btn.line{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--ink)}
+.btn.line span+span{background:var(--gold)}
+.cf .btn+.btn{margin-top:10px}
+.cf [hidden]{display:none!important}
+.toast{width:max-content;max-width:calc(100% - 32px);text-align:center}
+.cnote{margin:12px 0 0;font-size:.8rem;color:var(--muted-dk);line-height:1.4}
+#menu .soc a:hover{color:var(--gold)}
+
+/* Aparición al scrollear (visible por defecto) */
+@keyframes rvIn{from{opacity:0;transform:translateY(34px)}to{opacity:1;transform:none}}
+@supports (animation-timeline:view()){.rv{animation:rvIn linear both;animation-timeline:view();animation-range:entry 0% entry 35%}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+.logo span,.hero h1 .g,.how h2 .g,.ftop .big .g{font-style:italic}
+.logo{font-size:1.9rem}.btn,.cartbtn,.pill{letter-spacing:.05em}
+.pdesc strong{font-size:1.35rem;line-height:1.05}.price{font-size:1.65rem}.cat-h h3{font-size:clamp(1.8rem,3vw,2.4rem)}.step h4{font-size:1.7rem}.ncard h4{font-size:2rem}.step b{font-size:4.5rem}
+.stag,.tag{letter-spacing:.1em}
+</style>
+</head>
+<body>
+
+<header class="top" id="top">
+  <div class="bar">
+    <div class="left">
+      <button class="burger" id="burger" aria-label="Abrir menú"><span></span><span></span><span></span></button>
+      <a href="#" class="logo">Maison <span>Noir</span></a>
+      <div class="tagline">PERFUMERÍA DE AUTOR</div>
+    </div>
+    <button class="cartbtn" id="openCart">Carrito <b id="count">0</b></button>
+  </div>
+</header>
+
+<div id="menu">
+  <nav>
+    <a href="#productos">Productos</a>
+    <a href="#como">Cómo comprar</a>
+    <a href="#novedades">Novedades</a>
+    <a href="#contacto">Contacto</a>
+  </nav>
+  <div class="soc" id="soc"></div>
+</div>
+
+<section class="hero">
+  <div class="wrap">
+    <h1 class="disp">La esencia<br><span class="o">de lo</span> <span class="g">inolvidable</span></h1>
+    <p>Fragancias de autor, perfumes de nicho, decants y sets de regalo. Encontrá tu firma olfativa.</p>
+    <div class="cta"><a class="btn" href="#productos"><span>Ver productos</span><span>Ver productos</span></a></div>
+  </div>
+  <div class="floaty" id="floaty">
+    <svg viewBox="0 0 200 200" aria-hidden="true">
+      <defs><linearGradient id="gl" x1="0" x2="1"><stop offset="0" stop-color="#e9b9ad"/><stop offset=".55" stop-color="#d49a8e"/><stop offset="1" stop-color="#b9766c"/></linearGradient></defs>
+      <ellipse cx="100" cy="184" rx="60" ry="8" fill="rgba(0,0,0,.4)"/>
+      <rect x="46" y="76" width="108" height="106" rx="14" fill="url(#gl)"/>
+      <rect x="54" y="84" width="92" height="90" rx="9" fill="none" stroke="#fff" stroke-opacity=".35" stroke-width="1.5"/>
+      <rect x="54" y="84" width="8" height="90" rx="4" fill="#fff" opacity=".3"/>
+      <rect x="90" y="62" width="20" height="16" fill="#8a6d2f"/>
+      <rect x="76" y="22" width="48" height="42" rx="7" fill="#c9a35b"/>
+      <rect x="76" y="50" width="48" height="4" fill="#8a6d2f"/>
+      <rect x="72" y="112" width="56" height="38" rx="3" fill="#f5ede3"/>
+      <rect x="82" y="124" width="36" height="2" fill="#c9a35b"/><rect x="88" y="132" width="24" height="2" fill="#c9a35b" opacity=".6"/>
+      <path d="M168 40l4 10 10 4-10 4-4 10-4-10-10-4 10-4z" fill="#c9a35b"/>
+    </svg>
+  </div>
+  <div class="mouse"><i></i></div>
+</section>
+
+<div class="marqwrap"><div class="marq"><div class="tr" id="marq"></div></div></div>
+
+<section class="prods" id="productos">
+  <div class="wrap">
+    <h2 class="disp"><small>Conocé nuestros</small><span class="o">Fragancias</span></h2>
+    <div id="cats"><div class="state">Cargando productos…</div></div>
+  </div>
+</section>
+
+<section class="how" id="como">
+  <div class="wrap">
+    <h2 class="disp rv">Comprar es<br><span class="g">fácil</span></h2>
+    <div class="steps">
+      <div class="step rv"><b>1</b><h4>Elegí</h4><p>Recorré las fragancias y sumá al carrito las que te enamoren. El stock se ve en cada frasco.</p></div>
+      <div class="step rv"><b>2</b><h4>Armá tu pedido</h4><p>Revisá cantidades y dejá tu nombre y dirección o un comentario.</p></div>
+      <div class="step rv"><b>3</b><h4>Coordinamos</h4><p>Tocá Contactar y tu pedido llega armado por WhatsApp o Instagram. Ahí acordamos pago y envío o retiro.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="news" id="novedades">
+  <div class="mosaic" id="mosaic"></div>
+  <div class="wrap"><div class="ncols" id="ncols"></div></div>
+</section>
+
+<footer id="contacto">
+  <div class="wrap">
+    <div class="ftop">
+      <h2 class="disp big rv">Seguí<br>conociéndonos<br><span class="g" id="igTxt">@tu_usuario</span></h2>
+      <div class="fnav">
+        <div><a href="#productos">Productos</a><a href="#como">Cómo comprar</a><a href="#novedades">Novedades</a></div>
+        <div><a href="#" id="waLink" target="_blank" rel="noopener">WhatsApp</a><a href="#" id="igLink" target="_blank" rel="noopener">Instagram</a><a href="#como">Envíos a todo el país</a></div>
+      </div>
+    </div>
+    <div class="fbot"><span>© <span id="year"></span> <span id="fname">Maison Noir</span>. Todos los derechos reservados.</span><span>Transferencia · Efectivo · Link de pago</span></div>
+  </div>
+</footer>
+
+<div class="ov" id="ov"></div>
+<aside id="cart" aria-label="Carrito">
+  <div class="ch"><h3>Tu pedido</h3><button id="closeCart" aria-label="Cerrar carrito">×</button></div>
+  <div id="items"></div>
+  <div class="cf">
+    <div class="tot"><span>Total</span><span id="total">$0</span></div>
+    <input id="nombre" placeholder="Tu nombre">
+    <input id="nota" placeholder="Dirección o comentario (opcional)">
+    <button class="btn dark" id="send" type="button"><span>Contactar por WhatsApp</span><span>Contactar por WhatsApp</span></button>
+    <button class="btn line" id="sendIg" type="button"><span>Contactar por Instagram</span><span>Contactar por Instagram</span></button>
+    <p class="cnote" id="cnote">En Instagram el pedido se copia solo: pegalo en el chat. El pago se coordina con el vendedor.</p>
+  </div>
+</aside>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+/* =====================================================
+   CONFIGURACIÓN  ← EDITÁ ESTO
+   ===================================================== */
+const CONFIG = {
+  SUPABASE_URL: "",          // Project URL de Supabase. Vacío = modo demo
+  SUPABASE_KEY: "",          // clave "anon" / "publishable" (pública)
+  NEGOCIO: "Maison Noir",       // Se cambian desde el panel (admin.html → Tienda)
+  LEMA: "PERFUMERÍA DE AUTOR",
+  WHATSAPP: "",              // con código de país, sin signos. Ej: 5492231234567
+  INSTAGRAM: "",             // usuario sin @
+  MONEDA: "$"
+};
+const demo = !CONFIG.SUPABASE_URL;
+
+const DEMO_P = [
+  {id:"1",nombre:"Rosa Nocturna",descripcion:"Eau de parfum 100 ml. Rosa de Damasco, vainilla y almizcle.",precio:89000,stock:8,categoria:"Femeninos"},
+  {id:"2",nombre:"Flor de Jazmín",descripcion:"Eau de parfum 75 ml. Jazmín, azahar y notas de pera.",precio:76000,stock:2,categoria:"Femeninos"},
+  {id:"3",nombre:"Ámbar Dulce",descripcion:"Eau de parfum 100 ml. Ámbar, caramelo y haba tonka.",precio:82000,stock:6,categoria:"Femeninos"},
+  {id:"4",nombre:"Velvet Orchid",descripcion:"Eau de parfum 50 ml. Orquídea negra, ciruela y pachulí.",precio:98000,stock:0,categoria:"Femeninos"},
+  {id:"5",nombre:"Peonía Blanca",descripcion:"Eau de toilette 100 ml. Peonía, lichi y cedro suave.",precio:64000,stock:10,categoria:"Femeninos"},
+  {id:"6",nombre:"Oud Imperial",descripcion:"Parfum 100 ml. Oud, pimienta rosa y cuero.",precio:125000,stock:4,categoria:"Masculinos"},
+  {id:"7",nombre:"Cuero & Tabaco",descripcion:"Eau de parfum 100 ml. Tabaco rubio, cuero y vainilla.",precio:92000,stock:7,categoria:"Masculinos"},
+  {id:"8",nombre:"Madera Negra",descripcion:"Eau de parfum 100 ml. Cedro, vetiver y bergamota.",precio:85000,stock:3,categoria:"Masculinos"},
+  {id:"9",nombre:"Aqua Sport",descripcion:"Eau de toilette 100 ml. Cítricos, menta y notas marinas.",precio:58000,stock:15,categoria:"Masculinos"},
+  {id:"10",nombre:"Sándalo Cálido",descripcion:"Extrait 50 ml. Sándalo, incienso suave y cardamomo.",precio:110000,stock:5,categoria:"Unisex"},
+  {id:"11",nombre:"Bergamota Fresca",descripcion:"Eau de cologne 100 ml. Bergamota, té verde y musgo blanco.",precio:62000,stock:9,categoria:"Unisex"},
+  {id:"12",nombre:"Incienso Real",descripcion:"Extrait 50 ml. Incienso, mirra y resina de ámbar.",precio:118000,stock:2,categoria:"Unisex"},
+  {id:"13",nombre:"Decant 10 ml a elección",descripcion:"Probá cualquier fragancia de la tienda en formato viaje.",precio:14000,stock:20,categoria:"Decants y sets"},
+  {id:"14",nombre:"Set de descubrimiento",descripcion:"Cinco decants de 5 ml en estuche para elegir tu firma.",precio:32000,stock:12,categoria:"Decants y sets"},
+  {id:"15",nombre:"Estuche regalo",descripcion:"Perfume 50 ml, crema corporal y envoltorio de regalo.",precio:105000,stock:0,categoria:"Decants y sets"}
+];
+const DEMO_N = [
+  {etiqueta:"Lanzamiento",titulo:"Colección Oud: tres fragancias de nicho",texto:"Maderas profundas y resinas, con proyección y fijación de todo el día.",arte:"frasco unisex nicho"},
+  {etiqueta:"Tip",titulo:"Cómo hacer que tu perfume dure más",texto:"Aplicalo sobre piel hidratada, en muñecas y cuello, sin frotar.",arte:"frasco femenino"},
+  {etiqueta:"Promo",titulo:"Sets de regalo con envío gratis",texto:"En todos los estuches y sets de descubrimiento, durante el mes.",arte:"set de regalo"}
+];
+const PALETA = ["#ecd9c6","#e8c9c4","#d9d2e6","#d6dfd3","#efe0b8","#cfd8e3","#f0cdbb","#e2d3df"];
+const TONOS = ["#e8b4a0","#d9a441","#8e6bbf","#6fa8a0","#c4566a","#4b6a8a"];
+
+/* ---------- Ilustraciones (si el producto no tiene foto) ---------- */
+const SH = '<ellipse cx="100" cy="184" rx="50" ry="7" fill="rgba(0,0,0,.22)"/>';
+const STRAW = (x1,y1,x2,y2)=>`<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}" stroke="#d6dadd" stroke-width="5" stroke-linecap="round"/>`;
+function hash(s){let h=0;for(const c of s)h=(h*31+c.charCodeAt(0))>>>0;return h;}
+function ilustrar(p){
+  const n=String(p.nombre||"").toLowerCase(),c=String(p.categoria||"").toLowerCase(),k=n+" "+c;
+  const t=TONOS[hash(k)%TONOS.length];
+  const L=(x,y,w)=>`<rect x="${x}" y="${y}" width="${w}" height="24" rx="3" fill="#f5ede3" opacity=".92"/><rect x="${x+w*.2}" y="${y+11}" width="${w*.6}" height="2" fill="#c9a35b"/>`;
+  const GL=(x,y,h)=>`<rect x="${x}" y="${y}" width="6" height="${h}" rx="3" fill="#fff" opacity=".35"/>`;
+  let g;
+  if(/decant|muestra|mini/.test(n)) g=`${SH}<rect x="82" y="64" width="36" height="116" rx="8" fill="${t}"/>${GL(87,72,96)}<rect x="88" y="36" width="24" height="30" rx="4" fill="#2b2321"/><rect x="88" y="52" width="24" height="3" fill="#c9a35b"/>${L(86,116,28)}`;
+  else if(/\bset\b|estuche|kit|coffret/.test(n)) g=`${SH}${[[52,TONOS[0]],[89,TONOS[2]],[126,TONOS[3]]].map(([x,cl])=>`<rect x="${x}" y="56" width="22" height="56" rx="5" fill="${cl}"/><rect x="${x+4}" y="40" width="14" height="18" rx="3" fill="#c9a35b"/>`).join("")}<rect x="34" y="100" width="132" height="80" rx="8" fill="#2b2321"/><rect x="40" y="106" width="120" height="68" rx="5" fill="none" stroke="#c9a35b" stroke-width="1.5"/><text x="100" y="146" text-anchor="middle" font-family="Georgia,serif" font-style="italic" font-size="20" fill="#c9a35b">Maison</text>`;
+  else if(/masc|hombre/.test(c)) g=`${SH}<rect x="54" y="72" width="92" height="108" rx="10" fill="${t}"/>${GL(62,82,88)}<rect x="90" y="58" width="20" height="16" fill="#8a6d2f"/><rect x="74" y="22" width="52" height="38" rx="4" fill="#2b2321"/><rect x="74" y="48" width="52" height="4" fill="#c9a35b"/>${L(78,114,44)}`;
+  else if(/unisex|nicho|[aá]rabe/.test(c)) g=`${SH}<rect x="66" y="52" width="68" height="128" rx="18" fill="${t}"/>${GL(74,66,96)}<rect x="90" y="40" width="20" height="14" fill="#8a6d2f"/><rect x="78" y="14" width="44" height="30" rx="10" fill="#c9a35b"/>${L(78,112,44)}`;
+  else g=`${SH}<circle cx="100" cy="122" r="56" fill="${t}"/><path d="M62 110C62 92 74 80 90 76" stroke="#fff" stroke-opacity=".5" stroke-width="5" fill="none" stroke-linecap="round"/><rect x="90" y="58" width="20" height="14" fill="#8a6d2f"/><rect x="80" y="24" width="40" height="36" rx="8" fill="#c9a35b"/>${L(78,114,44)}`;
+  return `<svg viewBox="0 0 200 200" aria-hidden="true">${g}</svg>`;
+}
+
+/* ---------- Datos ---------- */
+const $ = s => document.querySelector(s);
+const fmt = n => CONFIG.MONEDA + Number(n).toLocaleString("es-AR");
+const esc = s => String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+let productos = [];
+let carrito = {};
+try{ carrito = JSON.parse(localStorage.getItem("carritoPerfumes")||"{}"); }catch(e){}
+
+async function sb(path){
+  const r=await fetch(CONFIG.SUPABASE_URL.replace(/\/$/,"")+"/rest/v1/"+path,{cache:"no-store",headers:{apikey:CONFIG.SUPABASE_KEY,Authorization:"Bearer "+CONFIG.SUPABASE_KEY}});
+  if(!r.ok)throw new Error(r.status);return r.json();
+}
+function demoLeer(k,def){try{const d=JSON.parse(localStorage.getItem(k));if(Array.isArray(d))return d;}catch(e){}return def;}
+function textoPara(hex){
+  const h=(hex||"#fff").replace("#","");const n=parseInt(h.length===3?h.replace(/./g,"$&$&"):h,16);
+  return (0.299*(n>>16)+0.587*((n>>8)&255)+0.114*(n&255))>150?"#120e0f":"#f5ede3";
+}
+function aplicarMarca(a){
+  if(a)for(const k of ["negocio","lema","whatsapp","instagram"])if(a[k])CONFIG[k.toUpperCase()]=String(a[k]);
+  if(demo){CONFIG.WHATSAPP=CONFIG.WHATSAPP||"5492230000000";CONFIG.INSTAGRAM=CONFIG.INSTAGRAM||"tu_usuario";}
+  const n=CONFIG.NEGOCIO,m=n.match(/^(.+?)([A-Z][^A-Z\s]*)$/),wa=CONFIG.WHATSAPP,ig=CONFIG.INSTAGRAM;
+  $(".logo").innerHTML=m?esc(m[1])+"<span>"+esc(m[2])+"</span>":esc(n);
+  $(".tagline").textContent=CONFIG.LEMA;document.title=n;$("#fname").textContent=n;
+  $("#waLink").href=wa?`https://wa.me/${wa}`:"#";$("#waLink").hidden=!wa;
+  $("#igLink").href=ig?`https://instagram.com/${ig}`:"#";$("#igLink").hidden=!ig;
+  $("#igTxt").textContent=ig?"@"+ig:n;
+  $("#soc").innerHTML=(ig?`<a href="https://instagram.com/${esc(ig)}" target="_blank" rel="noopener">Instagram @${esc(ig)}</a>`:"")+(wa?`<a href="https://wa.me/${esc(wa)}" target="_blank" rel="noopener">WhatsApp</a>`:"");
+  $("#send").hidden=!wa;$("#sendIg").hidden=!ig;$("#cnote").hidden=!ig;
+}
+async function cargar(){
+  if(demo){
+    productos=demoLeer("maison_demo_p",DEMO_P).filter(p=>p.activo!==false);
+    renderNews(demoLeer("maison_demo_n",DEMO_N).filter(n=>n.activo!==false));
+    try{aplicarMarca(JSON.parse(localStorage.getItem("maison_demo_a")||"null"));}catch(e){}
+    return;
+  }
+  try{
+    const rows=await sb("maison_perfumes?select=*&activo=eq.true&order=categoria.asc,nombre.asc");
+    productos=rows.map(o=>({...o,id:String(o.id),precio:Number(o.precio)||0,stock:Number(o.stock)||0}));
+  }catch(e){
+    console.error(e);
+    $("#cats").innerHTML='<div class="state">No se pudieron cargar los productos. Probá de nuevo en unos minutos.</div>';
+  }
+  try{renderNews(await sb("maison_novedades?select=*&activo=eq.true&order=creado.desc"));}catch(e){renderNews([]);}
+  try{const a=await sb("maison_ajustes?select=*&id=eq.1");aplicarMarca(a[0]);}catch(e){}
+}
+
+/* ---------- Render ---------- */
+function renderCats(){
+  if(!productos.length)return;
+  const cats=[...new Set(productos.map(p=>p.categoria||"Productos"))];
+  let k=0;
+  $("#cats").innerHTML=cats.map((c,ci)=>{
+    const lista=productos.filter(p=>(p.categoria||"Productos")===c);
+    return `<div class="cat"><div class="cat-h"><i></i><h3>${esc(c)}</h3>
+      <div class="arrows"><button class="arr" data-s="${ci}" data-d="-1" aria-label="Anterior">←</button><button class="arr" data-s="${ci}" data-d="1" aria-label="Siguiente">→</button></div></div>
+      <div class="slider" data-i="${ci}">${lista.map(p=>{
+        const col=p.color||PALETA[k++%PALETA.length],t=textoPara(col),sin=p.stock<=0,poco=!sin&&p.stock<=3;
+        return `<article class="pcard"><div class="pimg">${p.imagen?`<img src="${esc(p.imagen)}" alt="${esc(p.nombre)}" loading="lazy" draggable="false">`:ilustrar(p)}
+          <span class="stag ${sin?"out":poco?"low":""}">${sin?"Sin stock":poco?"Últimas "+p.stock:"Disponible"}</span></div>
+          <div class="pdesc" style="--c:${esc(col)};--t:${t}"><strong>${esc(p.nombre)}</strong><p>${esc(p.descripcion)}</p>
+          <div class="pfoot"><span class="price">${fmt(p.precio)}</span><button class="add" data-id="${esc(p.id)}" ${sin?"disabled":""} aria-label="Agregar ${esc(p.nombre)} al carrito">+</button></div></div></article>`;}).join("")}</div></div>`;
+  }).join("");
+  document.querySelectorAll(".add").forEach(b=>b.onclick=()=>agregar(b.dataset.id));
+  document.querySelectorAll(".arr").forEach(b=>b.onclick=()=>{document.querySelector(`.slider[data-i="${b.dataset.s}"]`).scrollBy({left:+b.dataset.d*310,behavior:"smooth"});});
+  document.querySelectorAll(".slider").forEach(s=>{
+    let down=false,sx=0,sl=0;
+    s.addEventListener("pointerdown",e=>{if(e.pointerType!=="mouse"||e.target.closest("button"))return;down=true;sx=e.pageX;sl=s.scrollLeft;s.classList.add("drag");});
+    addEventListener("pointerup",()=>{down=false;s.classList.remove("drag");});
+    s.addEventListener("pointermove",e=>{if(down)s.scrollLeft=sl-(e.pageX-sx);});
+  });
+}
+function renderNews(list){
+  const sec=$("#novedades");
+  if(!list.length){sec.hidden=true;return;}
+  $("#mosaic").innerHTML=Array(14).fill("Nuevo ✦").map(t=>`<span>${t}</span>`).join("");
+  $("#ncols").innerHTML=list.slice(0,3).map((n,i)=>`<article class="ncard"><div class="tg"><i></i><span>${esc(n.etiqueta||"Novedad")}</span></div>
+    <h4>${esc(n.titulo)}</h4><p>${esc(n.texto)}</p>
+    <div class="nimg" style="background:${PALETA[(i*2+1)%PALETA.length]}">${n.imagen?`<img src="${esc(n.imagen)}" alt="${esc(n.titulo)}" loading="lazy">`:`<div>${ilustrar({nombre:n.arte||n.titulo})}</div>`}</div></article>`).join("");
+}
+
+/* ---------- Carrito ---------- */
+function guardar(){try{localStorage.setItem("carritoPerfumes",JSON.stringify(carrito));}catch(e){}renderCarrito();}
+function toast(m){const t=$("#toast");t.textContent=m;t.classList.add("on");clearTimeout(toast.h);toast.h=setTimeout(()=>t.classList.remove("on"),1800);}
+function agregar(id){
+  const p=productos.find(x=>String(x.id)===String(id));if(!p)return;
+  const a=carrito[id]||0;
+  if(a>=p.stock){toast("No hay más stock de este producto");return;}
+  carrito[id]=a+1;guardar();toast(p.nombre+" agregado al carrito");
+}
+function cambiar(id,d){
+  const p=productos.find(x=>String(x.id)===String(id));const n=(carrito[id]||0)+d;
+  if(n<=0)delete carrito[id];else if(p&&n<=p.stock)carrito[id]=n;guardar();
+}
+function lineas(){return Object.keys(carrito).map(id=>{const p=productos.find(x=>String(x.id)===id);return p&&p.stock>0?{p,q:Math.min(carrito[id],p.stock),id}:null;}).filter(Boolean);}
+function mensaje(){
+  const L=lineas(),total=L.reduce((a,l)=>a+l.p.precio*l.q,0);
+  const n=$("#nombre").value.trim(),nt=$("#nota").value.trim();
+  return `Hola! Quiero hacer un pedido:\n\n${L.map(l=>`• ${l.q} x ${l.p.nombre} — ${fmt(l.p.precio*l.q)}`).join("\n")}\n\nTotal: ${fmt(total)}`+(n?`\nNombre: ${n}`:"")+(nt?`\nNota: ${nt}`:"")+"\n\n¿Cómo coordinamos el pago y la entrega?";
+}
+function renderCarrito(){
+  const L=lineas();let total=0,cant=0;
+  $("#items").innerHTML=L.length?L.map(({p,q,id})=>{total+=p.precio*q;cant+=q;
+    return `<div class="it"><div class="th" style="--c:${esc(p.color||"#e6d3b3")}">${p.imagen?`<img src="${esc(p.imagen)}" alt="">`:ilustrar(p)}</div>
+    <div class="n">${esc(p.nombre)}<small>${fmt(p.precio)} c/u</small></div>
+    <div class="qty"><button onclick="cambiar('${esc(id)}',-1)" aria-label="Quitar uno">−</button><span>${q}</span><button onclick="cambiar('${esc(id)}',1)" aria-label="Sumar uno">+</button></div></div>`;}).join(""):'<div class="empty">Tu carrito está vacío.</div>';
+  $("#total").textContent=fmt(total);$("#count").textContent=cant;
+}
+const abrir=()=>{$("#cart").classList.add("on");$("#ov").classList.add("on");};
+const cerrar=()=>{$("#cart").classList.remove("on");$("#ov").classList.remove("on");};
+
+/* ---------- Contactar (el sitio no cobra: el pedido sale por chat) ---------- */
+function ir(url){const w=window.open(url,"_blank","noopener");if(!w)location.href=url;}
+function enviar(canal){
+  if(!lineas().length){toast("El carrito está vacío");return;}
+  const msg=mensaje();
+  if(canal==="wa"){ir(`https://wa.me/${CONFIG.WHATSAPP}?text=${encodeURIComponent(msg)}`);return;}
+  try{navigator.clipboard.writeText(msg).then(()=>toast("Pedido copiado: pegalo en el chat")).catch(()=>{});}catch(e){}
+  ir(`https://ig.me/m/${CONFIG.INSTAGRAM}`);
+}
+
+/* ---------- UI ---------- */
+const burger=$("#burger"),menu=$("#menu");
+function toggleMenu(f){const on=f??!menu.classList.contains("on");menu.classList.toggle("on",on);burger.classList.toggle("x",on);burger.setAttribute("aria-label",on?"Cerrar menú":"Abrir menú");document.body.style.overflow=on?"hidden":"";}
+burger.onclick=()=>toggleMenu();
+menu.querySelectorAll("a").forEach(a=>a.onclick=()=>toggleMenu(false));
+$("#openCart").onclick=abrir;$("#closeCart").onclick=cerrar;$("#ov").onclick=cerrar;
+$("#send").onclick=()=>enviar("wa");$("#sendIg").onclick=()=>enviar("ig");
+$("#year").textContent=new Date().getFullYear();
+const mq=["Femeninos","✦","Masculinos","✦","Unisex","✦","Decants","✦","Sets de regalo","✦"].map(t=>`<span>${t}</span>`).join("");
+$("#marq").innerHTML=mq.repeat(4);
+const top_=$("#top"),fl=$("#floaty");
+addEventListener("scroll",()=>{const y=scrollY;top_.classList.toggle("solid",y>60);fl.style.transform=`translateY(calc(-50% + ${Math.min(y,700)*.16}px))`;},{passive:true});
+aplicarMarca();
+(async()=>{await cargar();renderCats();renderCarrito();})();
+</script>
+</body>
+</html>
